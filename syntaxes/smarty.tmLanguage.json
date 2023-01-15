@@ -20,9 +20,24 @@
 	],
 	"repository": {
 		"blocks": {
+			"begin": "({%\/?)(?=[^{}\\s])",
+			"beginCaptures": [
+				{ "name": "source.smarty" },
+				{ "name": "punctuation.section.embedded.begin.smarty" }
+			],
+			"contentName": "source.smarty",
+			"end": "(%})",
+			"endCaptures": [
+				{ "name": "source.smarty" },
+				{ "name": "punctuation.section.embedded.end.smarty" }
+			],
+			"name": "meta.embedded.line.tag.smarty",
 			"patterns": [
-				{ "include": "#doublebraces" },
-				{ "include": "#singlebraces" }
+				{ "include": "#strings" },
+				{ "include": "#variables" },
+				{ "include": "#lang" },
+				{ "include": "#operators" },
+				{ "include": "#numbers" }
 			]
 		},
 		"literals": {
@@ -61,48 +76,6 @@
 					"match": "{%\\*",
 					"name": "invalid.illegal.characters-not-allowed-here.smarty"
 				}
-			]
-		},
-		"doublebraces":{
-			"begin": "({{\/?)(?=[^}\\s])",
-			"beginCaptures": [
-				{ "name": "source.smarty" },
-				{ "name": "punctuation.section.embedded.begin.smarty" }
-			],
-			"contentName": "source.smarty",
-			"end": "(}})",
-			"endCaptures": [
-				{ "name": "source.smarty" },
-				{ "name": "punctuation.section.embedded.end.smarty" }
-			],
-			"name": "meta.embedded.line.tag.smarty",
-			"patterns": [
-				{ "include": "#strings" },
-				{ "include": "#variables" },
-				{ "include": "#lang" },
-				{ "include": "#operators" },
-				{ "include": "#numbers" }
-			]
-		},
-		"singlebraces": {
-			"begin": "({\/?)(?=[^{}\\s])",
-			"beginCaptures": [
-				{ "name": "source.smarty" },
-				{ "name": "punctuation.section.embedded.begin.smarty" }
-			],
-			"contentName": "source.smarty",
-			"end": "(})",
-			"endCaptures": [
-				{ "name": "source.smarty" },
-				{ "name": "punctuation.section.embedded.end.smarty" }
-			],
-			"name": "meta.embedded.line.tag.smarty",
-			"patterns": [
-				{ "include": "#strings" },
-				{ "include": "#variables" },
-				{ "include": "#lang" },
-				{ "include": "#operators" },
-				{ "include": "#numbers" }
 			]
 		},
 		"strings": {
