@@ -6,7 +6,8 @@
 		"L:text.html.smarty -meta.embedded.literal -comment.block.smarty": {
 			"patterns": [
 				{ "include": "#comments" },
-				{ "include": "#blocks" }
+				{ "include": "#script" },
+				{ "include": "#style" }
 			]
 		},
 		"L:text.html.smarty -source.css -source.js": {
@@ -19,17 +20,75 @@
 		{ "include": "text.html.derivative" }
 	],
 	"repository": {
+		"script": {
+            "begin": "({%)(script)(%})",
+            "name": "source.js",
+            "contentName": "source.js",
+            "patterns": [{"include": "source.js"}],
+            "beginCaptures": {
+                "1": {
+                    "name": "punctuation.definition.tag.begin.html"
+                },
+                "2": {
+                    "name": "keyword.control.smarty"
+                },
+                "3": {
+                    "name": "punctuation.definition.tag.end.html"
+                }
+            },
+            "end": "({%/)(script)(%})",
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.definition.tag.begin.html"
+                },
+                "2": {
+                    "name": "keyword.control.smarty"
+                },
+                "3": {
+                    "name": "punctuation.definition.tag.end.html"
+                }
+            }
+        },
+		"style": {
+            "begin": "({%)(style)(%})",
+            "name": "source.css",
+            "contentName": "source.css",
+            "patterns": [{"include": "source.css"}],
+            "beginCaptures": {
+                "1": {
+                    "name": "punctuation.definition.tag.begin.html"
+                },
+                "2": {
+                    "name": "keyword.control.smarty"
+                },
+                "3": {
+                    "name": "punctuation.definition.tag.end.html"
+                }
+            },
+            "end": "({%/)(style)(%})",
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.definition.tag.begin.html"
+                },
+                "2": {
+                    "name": "keyword.control.smarty"
+                },
+                "3": {
+                    "name": "punctuation.definition.tag.end.html"
+                }
+            }
+        },
 		"blocks": {
 			"begin": "({%\/?)(?=[^{}\\s])",
 			"beginCaptures": [
 				{ "name": "source.smarty" },
-				{ "name": "punctuation.section.embedded.begin.smarty" }
+				{ "name": "punctuation.definition.tag.begin.html" }
 			],
 			"contentName": "source.smarty",
 			"end": "(%})",
 			"endCaptures": [
 				{ "name": "source.smarty" },
-				{ "name": "punctuation.section.embedded.end.smarty" }
+				{ "name": "punctuation.definition.tag.end.html" }
 			],
 			"name": "meta.embedded.line.tag.smarty",
 			"patterns": [
