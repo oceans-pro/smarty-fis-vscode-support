@@ -1,5 +1,5 @@
 /**
- * @file 代码
+ * @file 代码导航功能
  */
 
 import * as pth from 'path';
@@ -8,22 +8,26 @@ import * as fs from 'fs';
 import * as CONSTANTS from './constants';
 const findRoot = require('find-root');
 
-// extends
-// widget
-// body
-// {%extends file="common/page/layout/admin.tpl"%} 存在点击不了的问题...
 const PATH_REG = [
+    // extends
+    // widget
+    // body
+    // {%extends file="common/page/layout/admin.tpl"%} 存在点击不了的问题...
     {
-        type: 'attr',
+        type: 'abs',
         reg:  /(name|framework|file)=['"](.*?)[:/](.*?)['"]/,
         namespacePos: 2,
         uriPos: 3,
     },
     {
-        type: 'js',
+        type: 'abs',
         reg: /['"](.*?):(.*?\.js)['"]/,
         namespacePos: 1,
         uriPos: 2,
+    },
+    {
+        type: 'rel',
+        reg: /['"](\.\/.*)['"]/
     }
 ];
 
@@ -44,19 +48,28 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
         // ): Thenable<vscode.Location> {s
     ): vscode.Location | undefined {
         const fileName = document.fileName;
-
+        const dirName = pth.dirname(fileName);
         for(const item of PATH_REG) {
-            // attr
             const range = document.getWordRangeAtPosition(
                 position,
                 item.reg
             );
+
             if (range?.isSingleLine) {
                 const word = document.getText(range);
                 
                 const regRes = item.reg.exec(word);
-
-                // -- list:widget/sidebar/sidebar.tpl
+                // 绝对路径 ./nav.js
+                if (item.type === 'rel') {
+                    const path = pth.join(dirName, regRes[1]);
+                    console.log(path);
+                    
+                    return new vscode.Location(
+                        vscode.Uri.file(path),
+                        new vscode.Position(0, 0)
+                    );
+                }
+                // 相对路径 list:widget/sidebar/sidebar.tpl
                 // list
                 const namespace = regRes && regRes[item.namespacePos];
                 // widget/sidebar/sidebar.tpl
