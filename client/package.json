@@ -20,7 +20,7 @@
 	},
 	"devDependencies": {
 		"find-root": "^1.1.0",
-		"@types/node": "^18.0.0",
+		"@types/node": "^18.11.18",
 		"@types/vscode": "^1.68.0"
 	}
 }
