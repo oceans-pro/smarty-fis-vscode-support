@@ -156,6 +156,3 @@ Submit the [issues](https://github.com/aswinkumar863/smarty-vscode-support/issue
 ## Release Notes
 
 Detailed release notes are available [here](CHANGELOG.md).
-
-
-			"begin": "({%\/?)(?=[^{}\\s])(?=\\$|block|widget|body|head|html)",

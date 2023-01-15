@@ -1,14 +1,14 @@
 {
-	"name": "smarty-template-support",
-	"displayName": "Smarty Template Support",
-	"description": "Smarty template support with formatting, folding, snippets, syntax highlighting and more",
+	"name": "smarty-fis-support",
+	"displayName": "Smarty Fis Support",
+	"description": "Smarty Fis support with formatting, folding, snippets, syntax highlighting and more",
 	"author": {
-		"name": "Aswin Kumar",
-		"email": "aswinkumar863@gmail.com"
+		"name": "oceans",
+		"email": "oceans-mail@qq.com"
 	},
 	"license": "MIT",
 	"version": "2.0.0",
-	"publisher": "aswinkumar863",
+	"publisher": "oceans-pro",
 	"icon": "images/logo.png",
 	"galleryBanner": {
 		"color": "#BEAE3A",
