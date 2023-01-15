@@ -1,38 +1,39 @@
 {
 	"comments": {
-		"blockComment": ["{*", "*}"]
-	},
-	"brackets": [
-		["{", "}"],
-		["[", "]"],
-		["(", ")"],
-	],
-	"autoClosingPairs": [
-		{ "open": "{", "close": "}" },
-		{ "open": "[", "close": "]" },
-		{ "open": "(", "close": ")" },
-		{ "open": "'", "close": "'", "notIn": ["string", "comment"] },
-		{ "open": "\"", "close": "\"", "notIn": ["string"] },
-		{ "open": "`", "close": "`", "notIn": ["string", "comment"] }
-	],
-	"surroundingPairs": [
-		["%", "%"],
-		["{", "}"],
-		["[", "]"],
-		["(", ")"],
-		["'", "'"],
-		["\"", "\""]
-	],
-	"indentationRules": {
-		"increaseIndentPattern": "{{?(block|capture|else|elseif|for|foreach|foreachelse|function|if|literal|section|setfilter|strip|while)\\b.*}}?",
-		"decreaseIndentPattern": "{{?/(block|capture|for|foreach|function|if|literal|section|setfilter|strip|while)\\b}}?"
-	},
-	"wordPattern": "([\"'].*?:.*?[\"'])|(-?\\d*\\.\\d\\w*)|([^\\`\\~\\!\\@\\#\\%\\^\\&\\*\\(\\)\\-\\=\\+\\[\\{\\]\\}\\\\\\|\\;\\:\\'\\\"\\,\\.\\<\\>\\/\\?\\s]+)",
+        // symbols used for start and end a block comment. Remove this entry if your language does not support block comments
+        "blockComment": [ "{%*", "*%}" ]
+    },
+    "brackets": [
+        ["{", "}"],
+        ["[", "]"],
+        ["(", ")"]
+    ],
+    "autoClosingPairs": [
+        {"open": "{", "close": "}"},
+        {"open": "[", "close": "]"},
+        {"open": "(", "close": ")"},
+        {"open": "'", "close": "'", "notIn": ["string", "comment"]},
+        {"open": "\"", "close": "\"", "notIn": ["string"]},
+        {"open": "`", "close": "`", "notIn": ["string", "comment"]}
+    ],
+    "surroundingPairs": [
+        ["%", "%"],
+        ["{", "}"],
+        ["[", "]"],
+        ["(", ")"],
+        ["'", "'"],
+        ["\"", "\""]
+    ],
+    "indentationRules": {
+        "increaseIndentPattern": "{{?(block|capture|else|elseif|for|foreach|foreachelse|function|if|literal|section|setfilter|strip|while)\\b.*}}?",
+        "decreaseIndentPattern": "{{?/(block|capture|for|foreach|function|if|literal|section|setfilter|strip|while)\\b}}?"
+    },
+    "wordPattern": "([\"'].*?:.*?[\"'])|(-?\\d*\\.\\d\\w*)|([^\\`\\~\\!\\@\\#\\%\\^\\&\\*\\(\\)\\-\\=\\+\\[\\{\\]\\}\\\\\\|\\;\\:\\'\\\"\\,\\.\\<\\>\\/\\?\\s]+)",
     "folding": {
         "markers": {
             "start": "{%(script|style|body|head|html)\\b.*%}",
             "end": "{%/(script|style|body|head|html)\\b%}"
         },
         "offSide": true
-    },
+    }
 }

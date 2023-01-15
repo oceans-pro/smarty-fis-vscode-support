@@ -1,7 +1,11 @@
+/**
+ * @file 代码
+ */
+
 import * as pth from 'path';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-
+import * as CONSTANTS from './constants';
 const findRoot = require('find-root');
 
 // extends
@@ -27,7 +31,7 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
         // ): Thenable<vscode.Location> {s
     ): vscode.Location | undefined {
         const fileName = document.fileName;
-        const workDir = pth.dirname(fileName);
+
         const range = document.getWordRangeAtPosition(
             position,
             URI_REG
@@ -38,18 +42,15 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
 			
             const regRes = URI_REG.exec(word);
 
+            // -- list:widget/sidebar/sidebar.tpl
+            // list
             const namespace = regRes && regRes[2];
+            // widget/sidebar/sidebar.tpl
             const tplUri = regRes && regRes[3];
 			
             if (namespace && tplUri) {
-				console.log(this.getTplPathFromFisConf(
-					document.fileName,
-					namespace,
-					tplUri
-				));
-				
 				return this.getTplPathFromFisConf(
-					document.fileName,
+					fileName,
 					namespace,
 					tplUri
 				);
@@ -117,7 +118,7 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
 export function usePathHintAndJump(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
         vscode.languages.registerDefinitionProvider(
-            ['smarty'],
+            [CONSTANTS.languageId],
             new TplDefinitionProvider()
         )
     );

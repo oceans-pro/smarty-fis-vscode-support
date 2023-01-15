@@ -4,7 +4,6 @@ import { LanguageClient } from "vscode-languageclient/node";
 import { createLanguageClient } from "./client";
 import { setConfiguration } from "./configuration";
 import { usePathHintAndJump } from './path';
-import { setLanguageConfiguration } from "./language/configuration";
 import { DocumentLinkProvider } from "./language/documentLink";
 import { HighlightDecoration } from "./language/decoration";
 import { FormattingProvider } from "./language/formatter";
@@ -27,7 +26,6 @@ export function activate(context: ExtensionContext): void {
 	if (activeTextEditor) {
 		// Create decoration for highlight (if enabled)
 		smartyDecoration = new HighlightDecoration(activeTextEditor);
-		setLanguageConfiguration(activeTextEditor);
 	}
 
 	// Subscribe to document change
@@ -35,7 +33,6 @@ export function activate(context: ExtensionContext): void {
 		activeTextEditor = editor;
 		if (editor) {
 			smartyDecoration?.updateDecorations(activeTextEditor);
-			setLanguageConfiguration(activeTextEditor);
 		}
 	}, null, context.subscriptions);
 
