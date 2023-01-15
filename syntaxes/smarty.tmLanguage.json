@@ -2,6 +2,14 @@
 	"name": "Smarty",
 	"scopeName": "text.html.smarty",
 	"fileTypes": ["tpl"],
+	"tokenColors": [
+        {
+            "scope": "keyword.control.smarty.xyz",
+            "settings": {
+                "foreground": "#007acc"
+            }
+        }
+    ],
 	"injections": {
 		"L:text.html.smarty -meta.embedded.literal -comment.block.smarty": {
 			"patterns": [
@@ -31,7 +39,7 @@
                     "name": "punctuation.definition.tag.begin.html"
                 },
                 "2": {
-                    "name": "keyword.control.smarty"
+					"name": "markup.bold markup.underline"
                 },
                 "3": {
                     "name": "punctuation.definition.tag.end.html"
@@ -43,7 +51,7 @@
                     "name": "punctuation.definition.tag.begin.html"
                 },
                 "2": {
-                    "name": "keyword.control.smarty"
+					"name": "markup.bold markup.underline"
                 },
                 "3": {
                     "name": "punctuation.definition.tag.end.html"
@@ -60,7 +68,7 @@
                     "name": "punctuation.definition.tag.begin.html"
                 },
                 "2": {
-                    "name": "keyword.control.smarty"
+					"name": "markup.bold markup.underline"
                 },
                 "3": {
                     "name": "punctuation.definition.tag.end.html"
@@ -72,7 +80,7 @@
                     "name": "punctuation.definition.tag.begin.html"
                 },
                 "2": {
-                    "name": "keyword.control.smarty"
+					"name": "markup.bold markup.underline"
                 },
                 "3": {
                     "name": "punctuation.definition.tag.end.html"
@@ -229,7 +237,7 @@
 					"name": "keyword.operator.qualifier-alternates.smarty"
 				},
 				{
-					"match": "\\b(break|case|continue|default|else|elseif|for|foreach|foreachelse|if|section|sectionelse|switch|while)\\b",
+					"match": "\\b(as|break|case|continue|default|else|elseif|for|foreach|foreachelse|if|section|sectionelse|switch|while)\\b",
 					"name": "keyword.control.smarty"
 				},
 				{

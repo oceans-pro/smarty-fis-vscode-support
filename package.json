@@ -7,9 +7,9 @@
 		"email": "oceans-mail@qq.com"
 	},
 	"license": "MIT",
-	"version": "2.0.0",
+	"version": "1.0.0",
 	"publisher": "oceans-pro",
-	"icon": "images/logo.png",
+	"icon": "images/smarty.png",
 	"galleryBanner": {
 		"color": "#BEAE3A",
 		"theme": "dark"
