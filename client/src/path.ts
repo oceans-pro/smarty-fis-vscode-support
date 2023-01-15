@@ -12,7 +12,20 @@ const findRoot = require('find-root');
 // widget
 // body
 // {%extends file="common/page/layout/admin.tpl"%} 存在点击不了的问题...
-const URI_REG = /(name|framework|file)=['"](.*?)[:/](.*?)['"]/;
+const PATH_REG = [
+    {
+        type: 'attr',
+        reg:  /(name|framework|file)=['"](.*?)[:/](.*?)['"]/,
+        namespacePos: 2,
+        uriPos: 3,
+    },
+    {
+        type: 'js',
+        reg: /['"](.*?):(.*?\.js)['"]/,
+        namespacePos: 1,
+        uriPos: 2,
+    }
+];
 
 class TplDefinitionProvider implements vscode.DefinitionProvider {
     /**
@@ -32,28 +45,30 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
     ): vscode.Location | undefined {
         const fileName = document.fileName;
 
-        const range = document.getWordRangeAtPosition(
-            position,
-            URI_REG
-        );
+        for(const item of PATH_REG) {
+            // attr
+            const range = document.getWordRangeAtPosition(
+                position,
+                item.reg
+            );
+            if (range?.isSingleLine) {
+                const word = document.getText(range);
+                
+                const regRes = item.reg.exec(word);
 
-        if (range?.isSingleLine) {
-            const word = document.getText(range);
-			
-            const regRes = URI_REG.exec(word);
-
-            // -- list:widget/sidebar/sidebar.tpl
-            // list
-            const namespace = regRes && regRes[2];
-            // widget/sidebar/sidebar.tpl
-            const tplUri = regRes && regRes[3];
-			
-            if (namespace && tplUri) {
-				return this.getTplPathFromFisConf(
-					fileName,
-					namespace,
-					tplUri
-				);
+                // -- list:widget/sidebar/sidebar.tpl
+                // list
+                const namespace = regRes && regRes[item.namespacePos];
+                // widget/sidebar/sidebar.tpl
+                const tplUri = regRes && regRes[item.uriPos];
+                
+                if (namespace && tplUri) {
+                    return this.getTplPathFromFisConf(
+                        fileName,
+                        namespace,
+                        tplUri
+                    );
+                }
             }
         }
     }
