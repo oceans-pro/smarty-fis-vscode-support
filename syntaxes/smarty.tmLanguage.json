@@ -80,7 +80,7 @@
             }
         },
 		"blocks": {
-			"begin": "({%\/?)(?=[^{}\\s])(?=\\$|block|widget|body|head|html)",
+			"begin": "({%\/?)(?=[^{}\\s])(?!script|\/script|style|\/style)",
 			"beginCaptures": [
 				{ "name": "source.smarty" },
 				{ "name": "punctuation.definition.tag.begin.html" }
@@ -221,7 +221,7 @@
 		"lang": {
 			"patterns": [
 				{
-					"match": "(?i)\\b(TRUE|FALSE|NULL)\\b",
+					"match": "(?i)\\b(TRUE|FALSE|NULL|NONE)\\b",
 					"name": "constant.language.smarty"
 				},
 				{
