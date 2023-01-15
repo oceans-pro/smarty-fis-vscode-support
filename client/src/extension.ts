@@ -16,7 +16,6 @@ import * as CONSTANT from "./constants";
 let client: LanguageClient;
 
 export function activate(context: ExtensionContext): void {
-	usePathHintAndJump(context);
 
 	let { activeTextEditor } = window;
 
@@ -85,6 +84,8 @@ export function activate(context: ExtensionContext): void {
 	// Create the language client and start the client.
 	client = createLanguageClient(context);
 	client.start();
+
+	usePathHintAndJump(context);
 }
 
 export function deactivate(): Thenable<void> | undefined {

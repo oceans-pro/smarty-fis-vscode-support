@@ -4,7 +4,11 @@ import * as fs from 'fs';
 
 const findRoot = require('find-root');
 
-const URI_REG = /['"](.*):(.*)['"]/;
+// extends
+// widget
+// body
+// {%extends file="common/page/layout/admin.tpl"%} 存在点击不了的问题...
+const URI_REG = /(name|framework|file)=['"](.*?)[:/](.*?)['"]/;
 
 class TplDefinitionProvider implements vscode.DefinitionProvider {
     /**
@@ -28,12 +32,22 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
             position,
             URI_REG
         );
+
         if (range?.isSingleLine) {
             const word = document.getText(range);
+			
             const regRes = URI_REG.exec(word);
-            const namespace = regRes && regRes[1];
-            const tplUri = regRes && regRes[2];
+
+            const namespace = regRes && regRes[2];
+            const tplUri = regRes && regRes[3];
+			
             if (namespace && tplUri) {
+				console.log(this.getTplPathFromFisConf(
+					document.fileName,
+					namespace,
+					tplUri
+				));
+				
 				return this.getTplPathFromFisConf(
 					document.fileName,
 					namespace,
@@ -53,6 +67,7 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
         uriNamespace: string,
         tplUri: string
     ): vscode.Location | undefined {
+
         const parseNamespace = (fisConfPath: string) => {
             const content = fs.readFileSync(fisConfPath, 'utf-8');
             // fis.set('namespace', 'list');
