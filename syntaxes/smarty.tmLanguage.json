@@ -7,7 +7,8 @@
 			"patterns": [
 				{ "include": "#comments" },
 				{ "include": "#script" },
-				{ "include": "#style" }
+				{ "include": "#style" },
+				{ "include": "#blocks" }
 			]
 		},
 		"L:text.html.smarty -source.css -source.js": {
@@ -79,7 +80,7 @@
             }
         },
 		"blocks": {
-			"begin": "({%\/?)(?=[^{}\\s])",
+			"begin": "({%\/?)(?=[^{}\\s])(?=\\$|block|widget|body|head|html)",
 			"beginCaptures": [
 				{ "name": "source.smarty" },
 				{ "name": "punctuation.definition.tag.begin.html" }
@@ -100,7 +101,7 @@
 			]
 		},
 		"literals": {
-			"begin": "\\s+({{?)(literal)(}}?)",
+			"begin": "\\s+({%)(literal)(%})",
 			"beginCaptures": {
 				"0": { "name": "source.smarty" },
 				"1": { "name": "punctuation.section.embedded.begin.smarty" },
@@ -108,7 +109,7 @@
 				"3": { "name": "punctuation.section.embedded.end.smarty" }
 			},
 			"contentName": "text.html.derivative",
-			"end": "\\s+({{?\\/)(literal)(}}?)",
+			"end": "\\s+({%\\/)(literal)(%})",
 			"endCaptures": {
 				"0": { "name": "source.smarty" },
 				"1": { "name": "punctuation.section.embedded.begin.smarty" },
@@ -236,7 +237,7 @@
 					"name": "support.function.built-in.smarty"
 				},
 				{
-					"match": "\\b(script|style|body|head|html|widget|uri|require)\\b",
+					"match": "\\b(body|head|html|widget|uri|require)\\b",
 					"name": "support.function.built-in.smartyFis"
 				},
 				{
