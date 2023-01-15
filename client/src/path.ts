@@ -2,11 +2,8 @@
  * @file 代码导航功能
  */
 
-import * as pth from 'path';
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import * as CONSTANTS from './constants';
-const findRoot = require('find-root');
 
 const PATH_REG = [
     // extends
@@ -46,9 +43,13 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
         position: vscode.Position,
         token: vscode.CancellationToken
         // ): Thenable<vscode.Location> {s
-    ): vscode.Location | undefined {
+    ): Promise<vscode.Location | undefined> {
         const fileName = document.fileName;
-        const dirName = pth.dirname(fileName);
+        const dirName = vscode.Uri.joinPath(
+            vscode.Uri.file(fileName),
+            '../'
+        );
+        
         for(const item of PATH_REG) {
             const range = document.getWordRangeAtPosition(
                 position,
@@ -61,12 +62,14 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
                 const regRes = item.reg.exec(word);
                 // 绝对路径 ./nav.js
                 if (item.type === 'rel') {
-                    const path = pth.join(dirName, regRes[1]);
+                    const path = vscode.Uri.joinPath(dirName, regRes[1]);
 
-                    return new vscode.Location(
-                        vscode.Uri.file(path),
-                        new vscode.Position(0, 0)
-                    );
+                    return new Promise(resolve => {
+                        resolve(new vscode.Location(
+                            path,
+                            new vscode.Position(0, 0)
+                        ));
+                    });
                 }
                 // 相对路径 list:widget/sidebar/sidebar.tpl
                 // list
@@ -90,53 +93,59 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
      * @param fisProjectRoot
      * @returns
      */
-    private getTplPathFromFisConf(
+    private async getTplPathFromFisConf(
         fileName: string,
         uriNamespace: string,
         tplUri: string
-    ): vscode.Location | undefined {
+    ): Promise<vscode.Location | undefined> {
 
-        const parseNamespace = (fisConfPath: string) => {
-            const content = fs.readFileSync(fisConfPath, 'utf-8');
+        const parseNamespace = (fisConfText: string) => {
             // fis.set('namespace', 'list');
             const regRes = /fis\.set\(['"]namespace['"].*['"](.+)['"]/.exec(
-                content
+                fisConfText
             );
             return regRes && regRes[1];
+        
         }
+        const fisConfList = await vscode.workspace.findFiles('fis-conf.js', '**/node_modules/**', 1)
+        const isFisProject = fisConfList.length;
+        
+        if (isFisProject) {
+            let uri: vscode.Uri = null;
+            const fisDoc = await vscode.workspace.openTextDocument(fisConfList[0]);
+            // fis.set('namespace', 'list'); 一般不会超出20行
+            const fisDocText = fisDoc.getText(new vscode.Range(
+                new vscode.Position(0, 0),
+                new vscode.Position(20, 0)
+            ));
+            const currentNamespace = parseNamespace(fisDocText);
 
-        if (fileName) {
-            const currentFisProjectRoot = findRoot(fileName) as string;
-			const currentFisConfPath = pth.join(currentFisProjectRoot, 'fis-conf.js');
-            // 当前为fis-conf项目才进行下面操作
-            if (fs.existsSync(currentFisConfPath)) {
- 
-                const SPECIAL_MAP: {[k: string]: string} = {
-                    'common': 'fe-pc-common',
-                    'm-common': 'fe-wap-common'
-                };
-                const currentNamespace = parseNamespace(currentFisConfPath);
-                
-                // 情况一：引用本模块
-                if (currentNamespace === uriNamespace) {
-                    const uri =  pth.join(currentFisProjectRoot, tplUri);
-                    return new vscode.Location(
-                        vscode.Uri.file(uri),
-                        new vscode.Position(0, 0)
-                    )
-                }
-                // 情况二：引用公共模块（特殊优化）
-                else if (SPECIAL_MAP[uriNamespace]) {
-                    const uri =  pth.resolve(currentFisProjectRoot, '../', SPECIAL_MAP[uriNamespace], tplUri);
-                    return new vscode.Location(
-                        vscode.Uri.file(uri),
-                        new vscode.Position(0, 0)
-                    )
-                }
-                // 情况三：很少见，可以遍历上级目录，暂不进行实现
-                else {
+            const SPECIAL_MAP: {[k: string]: string} = {
+                'common': 'fe-pc-common',
+                'm-common': 'fe-wap-common'
+            };
+            const currentFisConfPath = fisConfList[0];
+            const currentFisProjectPath = vscode.Uri.joinPath(currentFisConfPath, '../');
 
-                }
+            // vscode.Uri.joinPath();
+            // 情况一：引用本模块
+            if (currentNamespace === uriNamespace) {
+                uri =  vscode.Uri.joinPath(currentFisProjectPath, tplUri);
+            }
+            // 情况二：引用公共模块（特殊优化）
+            else if (SPECIAL_MAP[uriNamespace]) {
+                uri = vscode.Uri.joinPath(currentFisProjectPath, '../', SPECIAL_MAP[uriNamespace], tplUri);
+            }
+            // 情况三：很少见，可以遍历上级目录，暂不进行实现
+            else {
+
+            }
+
+            if (uri) {
+                return new vscode.Location(
+                    uri,
+                    new vscode.Position(0, 0)
+                )
             }
         }
     }
