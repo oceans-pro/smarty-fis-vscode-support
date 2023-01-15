@@ -62,8 +62,7 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
                 // 绝对路径 ./nav.js
                 if (item.type === 'rel') {
                     const path = pth.join(dirName, regRes[1]);
-                    console.log(path);
-                    
+
                     return new vscode.Location(
                         vscode.Uri.file(path),
                         new vscode.Position(0, 0)
