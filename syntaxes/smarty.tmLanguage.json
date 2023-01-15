@@ -204,6 +204,10 @@
 					"name": "support.function.built-in.smarty"
 				},
 				{
+					"match": "\\b(script|style|body|head|html|widget|uri|require)\\b",
+					"name": "support.function.built-in.smartyFis"
+				},
+				{
 					"match": "(?<=\\{)([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s)",
 					"name": "entity.name.function.smarty"
 				},

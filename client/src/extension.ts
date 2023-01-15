@@ -3,7 +3,7 @@ import { LanguageClient } from "vscode-languageclient/node";
 
 import { createLanguageClient } from "./client";
 import { setConfiguration } from "./configuration";
-
+import { usePathHintAndJump } from './path';
 import { setLanguageConfiguration } from "./language/configuration";
 import { DocumentLinkProvider } from "./language/documentLink";
 import { HighlightDecoration } from "./language/decoration";
@@ -16,6 +16,7 @@ import * as CONSTANT from "./constants";
 let client: LanguageClient;
 
 export function activate(context: ExtensionContext): void {
+	usePathHintAndJump(context);
 
 	let { activeTextEditor } = window;
 
