@@ -1,157 +1,145 @@
 {
 	"append": {
 		"prefix": "append",
-		"body": "{append var=\"${1:name}\" value=\"${2:value}\" index=\"${3:last}\"}$0",
-		"description": "{append} is used for creating or appending template variable arrays during the execution of a template.",
+		"body": "{%append var=\"${1:name}\" value=\"${2:value}\" index=\"${3:last}\"%}$0",
+		"description": "{%append%} is used for creating or appending template variable arrays during the execution of a template.",
 		"reference": "language.function.append.tpl"
 	},
 	"assign": {
 		"prefix": "assign",
-		"body": "{assign var=\"${1:name}\" value=${2:value}${4: scope=${3:scope}}}$0",
-		"description": "{assign} is used for assigning template variables during the execution of a template.",
+		"body": "{%assign var=\"${1:name}\" value=${2:value}${4: scope=${3:scope}}%}$0",
+		"description": "[assign] is used for assigning template variables during the execution of a template.",
 		"reference": "language.function.assign.tpl"
 	},
 	"block": {
 		"prefix": "block",
-		"body": "{block name=${1:name}}\n\t$0\n{/block}",
-		"description": "{block} is used to define a named area of template source for template inheritance.",
+		"body": "{%block name=${1:name}%}\n\t$0\n{%/block%}",
+		"description": "[block] is used to define a named area of template source for template inheritance.",
 		"reference": "language.function.block.tpl"
 	},
 	"/block": {
 		"prefix": "/block",
-		"body": "{/block}$0",
+		"body": "{%/block%}$0",
 		"description": "",
 		"reference": ""
 	},
 	"break": {
 		"prefix": "break",
-		"body": "{break}$0",
-		"description": "{break} aborts the iteration of the array.",
+		"body": "{%break%}$0",
+		"description": "[break] aborts the iteration of the array.",
 		"reference": "language.function.foreach.tpl#foreach.construct.break"
 	},
 	"capture": {
 		"prefix": "capture",
-		"body": "{capture ${2:name=\"${1:name}\" }${4:assign=\"${3:variable}\" }${6:append=\"${5:array_variable}\"}}\n\t$0\n{/capture}",
-		"description": "{capture} is used to collect the output of the template between the tags into a variable instead of displaying it. Any content between {capture name='foo'} and {/capture} is collected into the variable specified in the name attribute.",
+		"body": "{%capture ${2:name=\"${1:name}\" }${4:assign=\"${3:variable}\" }${6:append=\"${5:array_variable}\"}%}\n\t$0\n{%/capture%}",
+		"description": "[capture] is used to collect the output of the template between the tags into a variable instead of displaying it. Any content between {%capture name='foo'%} and {%/capture%} is collected into the variable specified in the name attribute.",
 		"reference": "language.function.capture.tpl"
 	},
 	"/capture": {
 		"prefix": "/capture",
-		"body": "{/capture}$0",
-		"description": "",
-		"reference": ""
-	},
-	"case": {
-		"prefix": "case",
-		"body": "{case ${1:case_name}}\n\t$0\n\t${2:{break}}",
+		"body": "{/%capture%}$0",
 		"description": "",
 		"reference": ""
 	},
 	"comment": {
 		"prefix": "comment",
-		"body": "{* ${1:comment} *}$0",
-		"description": "",
+		"body": "{%*\n\t@file ${1:comment}\n*%}\n\n$0",
+		"description": "注释",
 		"reference": ""
-	},
-	"debug": {
-		"prefix": "debug",
-		"body": "{\\$${1:variable}|@debug_print_var}$0",
-		"description": "{debug} dumps the debug console to the page.",
-		"reference": "language.function.debug.tpl"
 	},
 	"else": {
 		"prefix": "else",
-		"body": "{else}\n\t$0",
+		"body": "{%else%}\n\t$0",
 		"description": "",
 		"reference": ""
 	},
 	"elseif": {
 		"prefix": "elseif",
-		"body": "{elseif ${1:condition}}\n\t$0",
+		"body": "{%elseif ${1:condition}%}\n\t$0",
 		"description": "",
 		"reference": ""
 	},
 	"extends": {
 		"prefix": "extends",
-		"body": "{extends file=\"${1:file}\"}$0",
-		"description": "{extends} tags are used in child templates in template inheritance for extending parent templates.",
+		"body": "{%extends file=\"${1:file}\"%}$0",
+		"description": "[extends] tags are used in child templates in template inheritance for extending parent templates.",
 		"reference": "language.function.extends.tpl"
 	},
 	"foreach": {
 		"prefix": "foreach",
-		"body": "{foreach from=${1:collection} item=${2:item}${4: key=${3:key}}${6: name=${5:name}}}\n\t$0\n{/foreach}",
-		"description": "{foreach} is used for looping over arrays of data.",
+		"body": "{%foreach from=${1:collection} item=${2:item}${4: key=${3:key}}${6: name=${5:name}}%}\n\t$0\n{%/foreach%}",
+		"description": "[foreach] is used for looping over arrays of data.",
 		"reference": "language.function.foreach.tpl"
 	},
 	"foreachelse": {
 		"prefix": "foreachelse",
-		"body": "{foreachelse}$0",
+		"body": "{%foreachelse%}$0",
 		"description": "",
 		"reference": ""
 	},
 	"/foreach": {
 		"prefix": "/foreach",
-		"body": "{/foreach}$0",
+		"body": "{%/foreach%}$0",
 		"description": "",
 		"reference": ""
 	},
 	"function": {
 		"prefix": "function",
-		"body": "{function name=\"${1:name}\" ${2:variables}}\n\t$0\n{/function}",
-		"description": "{function} is used to create functions within a template and call them just like a plugin function. Instead of writing a plugin that generates presentational content, keeping it in the template is often a more manageable choice. It also simplifies data traversal, such as deeply nested menus.",
+		"body": "{%function name=\"${1:name}\" ${2:variables}%}\n\t$0\n{%/function%}",
+		"description": "[function] is used to create functions within a template and call them just like a plugin function. Instead of writing a plugin that generates presentational content, keeping it in the template is often a more manageable choice. It also simplifies data traversal, such as deeply nested menus.",
 		"reference": "language.function.function.tpl"
 	},
 	"/function": {
 		"prefix": "/function",
-		"body": "{/function}$0",
+		"body": "{%/function%}$0",
 		"description": "",
 		"reference": ""
 	},
 	"if": {
 		"prefix": "if",
-		"body": "{if ${1:condition}}\n\t$0\n{/if}",
+		"body": "{%if ${1:condition}%}\n\t$0\n{%/if%}",
 		"description": "",
 		"reference": ""
 	},
 	"/if": {
 		"prefix": "/if",
-		"body": "{/if}$0",
+		"body": "{%/if%}$0",
 		"description": "",
 		"reference": ""
 	},
 	"ifelse": {
 		"prefix": "ifelse",
-		"body": "{if ${1:condition}}\n\t$2\n{else}\n\t$3\n{/if}",
+		"body": "{%if ${1:condition}%}\n\t$2\n{%else%}\n\t$3\n{%/if%}",
 		"description": "",
 		"reference": ""
 	},
 	"include": {
 		"prefix": "include",
-		"body": "{include file=\"${1:file}\"${3: assign=${2:name}}${6: ${4:var1}=${5:value}}}$0",
-		"description": "{include} tags are used for including other templates in the current template.",
+		"body": "{%include file=\"${1:file}\"${3: assign=${2:name}}${6: ${4:var1}=${5:value}}%}$0",
+		"description": "[include] tags are used for including other templates in the current template.",
 		"reference": "language.function.include.tpl"
 	},
 	"literal": {
 		"prefix": "literal",
-		"body": "{literal}\n\t$0\n{/literal}",
-		"description": "{literal} tags allow a block of data to be taken literally. This is typically used around Javascript or stylesheet blocks where {curly braces} would interfere with the template delimiter syntax.",
+		"body": "{%literal%}\n\t$0\n{%/literal%}",
+		"description": "[literal] tags allow a block of data to be taken literally. This is typically used around Javascript or stylesheet blocks where {curly braces} would interfere with the template delimiter syntax.",
 		"reference": "language.function.literal.tpl"
 	},
 	"/literal": {
 		"prefix": "/literal",
-		"body": "{/literal}$0",
+		"body": "{%/literal%}$0",
 		"description": "",
 		"reference": ""
 	},
 	"strip": {
 		"prefix": "strip",
-		"body": "{strip}\n\t$0\n{/strip}",
-		"description": "Anything within {strip}{/strip} tags are stripped of the extra spaces or carriage returns at the beginnings and ends of the lines before they are displayed.",
+		"body": "{%strip%}\n\t$0\n{%/strip%}",
+		"description": "Anything within {%strip%}{/%strip%} tags are stripped of the extra spaces or carriage returns at the beginnings and ends of the lines before they are displayed.",
 		"reference": "language.function.strip.tpl"
 	},
 	"/strip": {
 		"prefix": "/strip",
-		"body": "{/strip}$0",
+		"body": "{%/strip%}$0",
 		"description": "",
 		"reference": ""
 	},
@@ -298,5 +286,45 @@
 		"body": "|wordwrap",
 		"description": "Wraps a string to a column width, the default is 80. ",
 		"reference": "language.modifier.wordwrap.tpl"
+	},
+	"script": {
+		"prefix": "script",
+		"body": "{%script%}\n\t${1}\n{%/script%}\n$0",
+		"description": "如果内嵌资源中引用了（require）某个组件化 js ，就必须放到此标签内；此标签内的 js 最后会收集起来统一放置到 </body> 后。 如果有些内嵌脚本，如统计脚本，不想被收集到最后面，直接使用原生标签即可。"
+	},
+	"style": {
+		"prefix": "style",
+		"body": "{%style%}\n\t${1}\n{%/style%}\n$0",
+		"description": "收集内嵌的 css 资源到 </head> 前，但在所有 link 资源后，这个顺序需要特别注意一下。收集内嵌 css 资源到同一个 style 标签下有助于页面渲染性能。"
+	},
+	"html": {
+		"prefix": "html",
+		"body": "{%html framework=\"common:static/mod.js\"%}\n\t${1}\n{%/html%}\n$0",
+		"description": "替换 html 标签，必须。framework 设置 mod.js 的 ID，为了确认哪个文件是模块化框架"
+	},
+	"head": {
+		"prefix": "head",
+		"body": "{%head%}\n\t${1}\n{%/head%}\n$0",
+		"description": "替换 head 标签，必须。"
+	},
+	"body": {
+		"prefix": "body",
+		"body": "{%body%}\n\t${1}\n{%/body%}\n$0",
+		"description": "替换 body 标签，必须。"
+	},
+	"require": {
+		"prefix": "require",
+		"body": "{%require name=\"${1:namespace}:${2:path}\"%}\n$0",
+		"description": "模板层面的资源加载接口，如果使用原生 link 或者 script 引用资源不会被收集起来放到 </body> 标签后面，所以就有了这个接口。"
+	},
+	"uri": {
+		"prefix": "uri",
+		"body": "{%uri name=\"${1:namespace}:${2:path}.js\"%}\n$0",
+		"description": "由于 FIS 构建时会根据配置给资源添加 cdn、md5戳，这个给编码带来了一些麻烦。uri 接口可以动态获取资源的最终 url"
+	},
+	"~widget": {
+		"prefix": "widget",
+		"body": "{%widget name=\"${1:namespace}:${2:path}.tpl\"%}\n$0",
+		"description": "FIS 模块化组件加载接口，加载某个模板并收集模板依赖的所有静态资源。"
 	}
 }
