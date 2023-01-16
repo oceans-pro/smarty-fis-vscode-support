@@ -4,6 +4,7 @@
 
 import * as vscode from 'vscode';
 import * as CONSTANTS from './constants';
+const JSON5 = require("json5").default;
 
 const PATH_REG = [
     // extends
@@ -28,13 +29,14 @@ const PATH_REG = [
     }
 ];
 
-class TplDefinitionProvider implements vscode.DefinitionProvider {
+class PathDefinitionProvider implements vscode.DefinitionProvider {
+    // 兜底，仅暴露两个
     fisNamespaceDirDict: {[k: string]: string} = {
         'common': 'fe-pc-common',
         'm-common': 'fe-wap-common'
     };
-    isFisProject: boolean;
-    isFisProjectFather: boolean;
+    isFisProject: boolean = false;
+    isFisProjectFather: boolean = false;
 
     constructor() {
         this.initFisPathDict();
@@ -82,6 +84,30 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
             const d = getDirname(rootFisConfList[0].fsPath);
             if (d && n) {
                 this.fisNamespaceDirDict[n] = d;
+            }
+            const jsonFiles = await vscode.workspace.findFiles('jsconfig.json');
+            if (jsonFiles && jsonFiles[0]) {
+                const doc = await vscode.workspace.openTextDocument(jsonFiles[0]);
+                const text = doc.getText();
+                const config = JSON5.parse(text);
+                const paths = config?.compilerOptions?.paths || {};
+
+                Object.keys(paths).forEach(p => {
+                    const n = p.split(':')[0];
+                    const path = paths[p]?.[0] || '';
+                    
+                    const slices = path.split('/');
+                    // 找到第一个不为 . 和 .. 的
+                    const d = slices.find(s => {
+                        if (!s.includes('.')) {
+                            return s;
+                        }
+                    });
+                    if (n && d) {
+                        this.fisNamespaceDirDict[n] = d;
+                    }
+                });
+                
             }
         }
         if (isFisProjectFather) {
@@ -201,7 +227,7 @@ export function usePathHintAndJump(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
         vscode.languages.registerDefinitionProvider(
             [CONSTANTS.languageId],
-            new TplDefinitionProvider()
+            new PathDefinitionProvider()
         )
     );
 }
