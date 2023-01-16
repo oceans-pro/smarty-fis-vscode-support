@@ -73,7 +73,11 @@
 		"snippets": [
 			{
 				"language": "smarty",
-				"path": "./snippets/snippets.json"
+				"path": "./snippets/smarty.snippets.json"
+			},
+			{
+				"language": "javascript",
+				"path": "./snippets/javascript.snippets.json"
 			}
 		],
 		"commands": [

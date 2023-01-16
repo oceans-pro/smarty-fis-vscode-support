@@ -1,0 +1,22 @@
+{
+	"sm": {
+		"prefix": "sm data",
+		"body": "{%$$1%}$0",
+		"description": "基本"
+	},
+	"smnumber": {
+		"prefix": "sm number",
+		"body": "Number({%$$1%})$0",
+		"description": "number"
+	},
+	"smstring": {
+		"prefix": "sm string",
+		"body": "'{%$$1%}'$0",
+		"description": "string"
+	},
+	"ik_json_encode": {
+		"prefix": "sm object",
+		"body": "new Object({%ik_json_encode data=$$1%})$0",
+		"description": "支持GBK转码的json_encode"
+	}
+}

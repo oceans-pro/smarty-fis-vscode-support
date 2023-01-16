@@ -2,25 +2,32 @@ import { CancellationToken, Hover, MarkdownString, Position , ProviderResult, Te
 
 import * as CONSTANT from "../constants";
 
-const snippets = require("../../../snippets/snippets.json");
+const snippetsSmarty = require("../../../snippets/smarty.snippets.json");
+const snippetsJavascript = require("../../../snippets/javascript.snippets.json");
 
 export class HoverProvider implements HoverProvider {
 
 	provideHover(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Hover> {
-		const range = document.getWordRangeAtPosition(position);
+
+		const snippets = {
+			...snippetsSmarty,
+			...snippetsJavascript,
+		};
+
+		const range = document.getWordRangeAtPosition(position, /[a-zA-Z_0-9]+/);
 		const word = document.getText(range);
 		const line = document.lineAt(position).text;
 
 		try {
-			const regex = new RegExp(`{.*?${word}\\b.*?}`);
-
+			const regex = new RegExp(`{%.*?${word}\\b.*?%}`);
 			if (!regex.test(line) || !snippets[word]) {
 				return null;
 			}
-		} catch (error) {
+		}
+		catch (error) {
 			return null;
 		}
-
+		
 		const snippet = snippets[word];
 
 		if (!snippet.description.length) {

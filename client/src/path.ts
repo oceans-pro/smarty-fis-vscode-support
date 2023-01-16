@@ -3,6 +3,7 @@
  */
 
 import * as vscode from 'vscode';
+import {CompletionItemKind} from 'vscode-languageclient';
 import * as CONSTANTS from './constants';
 const JSON5 = require("json5").default;
 
@@ -29,7 +30,84 @@ const PATH_REG = [
     }
 ];
 
-class PathDefinitionProvider implements vscode.DefinitionProvider {
+class SmartyCompletionItemProvider implements vscode.CompletionItemProvider {
+    constructor() {
+
+    }
+
+    provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem>> {
+        const line = document.lineAt(position).text;
+        const st = line.substring(0, position.character);
+        const ed = line.substring(position.character, line.length);
+        // sm + tab
+        if (st.endsWith('{%') && ed.includes('%}') ) {
+            const arr = [
+                'ik_json_encode',
+                'block',
+                'widget',
+                'script',
+                'style',
+                'foreach'
+            ];
+            return arr.map(i => ({
+                detail: i,
+                kind: CompletionItemKind.Function,
+                filterText: i,
+                label: i,
+                insertText: i
+            }));
+        }
+        /**
+         * 简易实现
+         */
+        if (st.includes('{%widget')
+            && ed.includes('%}')
+            && !st.includes('name=')
+        ) {
+
+            return [
+                {
+                    detail: 'name',
+                    kind: CompletionItemKind.Field,
+                    filterText: 'name',
+                    label: 'name',
+                    insertText: 'name="namespace:widgetPath"'
+                }
+            ];
+        }
+        // 路径提示暂时没有思路
+        // if (st.includes('{%widget')
+        //     // && /name=(.*?):/.test(st)
+        // ) {
+
+        //     const regRes = /name="(.*?):/.exec(st);
+        //     if (regRes && regRes[1]) {
+        //         console.log(regRes[1]);
+                
+        //     }
+            
+        //     return [
+        //         // commitCharacters: [':', '/'],
+        //         {
+        //             detail: 'name',
+        //             kind: CompletionItemKind.Field,
+        //             filterText: 'name',
+        //             label: 'name',
+        //             insertText: 'name="namespace:widgetPath"'
+        //         },
+        //         {
+        //             detail: 'widget/list/list.tpl',
+        //             label: 'widget/list/list.tpl',
+        //             kind: CompletionItemKind.Field,
+        //             filterText: 'widget/list/list.tpl',
+        //             insertText: 'widget/list/list.tpl"'
+        //         }
+        //     ];
+        // }
+    }
+}
+
+class SmartyDefinitionProvider implements vscode.DefinitionProvider {
     // 兜底，仅暴露两个
     fisNamespaceDirDict: {[k: string]: string} = {};
     isFisProject: boolean = false;
@@ -229,7 +307,16 @@ export function usePathHintAndJump(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
         vscode.languages.registerDefinitionProvider(
             [CONSTANTS.languageId],
-            new PathDefinitionProvider()
+            new SmartyDefinitionProvider()
+        )
+    );
+
+    context.subscriptions.push(
+        vscode.languages.registerCompletionItemProvider(
+            [CONSTANTS.languageId],
+            new SmartyCompletionItemProvider(),
+            '/',
+            ':'
         )
     );
 }
