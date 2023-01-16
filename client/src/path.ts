@@ -85,8 +85,9 @@ class PathDefinitionProvider implements vscode.DefinitionProvider {
             if (d && n) {
                 this.fisNamespaceDirDict[n] = d;
             }
-            const jsonFiles = await vscode.workspace.findFiles('jsconfig.json');
+            const jsonFiles = await vscode.workspace.findFiles('[jt]sconfig.json');
             if (jsonFiles && jsonFiles[0]) {
+
                 const doc = await vscode.workspace.openTextDocument(jsonFiles[0]);
                 const text = doc.getText();
                 const config = JSON5.parse(text);
