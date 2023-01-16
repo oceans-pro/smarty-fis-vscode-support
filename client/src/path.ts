@@ -29,10 +29,78 @@ const PATH_REG = [
 ];
 
 class TplDefinitionProvider implements vscode.DefinitionProvider {
+    fisNamespaceDirDict: {[k: string]: string} = {
+        'common': 'fe-pc-common',
+        'm-common': 'fe-wap-common'
+    };
+    isFisProject: boolean;
+    isFisProjectFather: boolean;
+
+    constructor() {
+        this.initFisPathDict();
+    }
+
+    async initFisPathDict() {
+        const parseNamespace = (fisConfText: string) => {
+            // fis.set('namespace', 'list');
+            const regRes = /fis\.set\(['"]namespace['"].*['"](.+)['"]/.exec(
+                fisConfText
+            );
+            return regRes && regRes[1];
+        }
+    
+        const getDirname = (path: string) => {
+            // /xxx/fe-pc-xxx/fis-conf.js
+            const arr = path.split('/');
+            return arr[arr.length - 2];
+        }
+    
+        const getNamespaceFromUri = async (uri: string) => {
+            const fisDoc = await vscode.workspace.openTextDocument(uri);
+            // fis.set('namespace', 'list'); 一般不会超出20行
+            const fisDocText = fisDoc.getText(new vscode.Range(
+                new vscode.Position(0, 0),
+                new vscode.Position(20, 0)
+            ));
+            const fileNamespace = parseNamespace(fisDocText);
+            if (fileNamespace) {
+                return fileNamespace;
+            }
+        }
+        // in fe-pc-xxx
+        const rootFisConfList = await vscode.workspace.findFiles('fis-conf.js', '**/node_modules/**', 1);
+        // in fe-pc-xxx ../
+        const allFisConfList = await vscode.workspace.findFiles('*/fis-conf.js', '**/node_modules/**');
+        const isFisProject = !!rootFisConfList.length;
+        const isFisProjectFather = !!allFisConfList.length && !isFisProject;
+    
+        if (!isFisProject && !isFisProjectFather) {
+            return;
+        }
+        if (isFisProject) {
+            const n = await getNamespaceFromUri(rootFisConfList[0].fsPath);
+            const d = getDirname(rootFisConfList[0].fsPath);
+            if (d && n) {
+                this.fisNamespaceDirDict[n] = d;
+            }
+        }
+        if (isFisProjectFather) {
+            allFisConfList.forEach(async u => {
+                const n = await getNamespaceFromUri(u.fsPath);
+                const d = getDirname(u.fsPath);
+                if (d && n) {
+                    this.fisNamespaceDirDict[n] = d;
+                }
+            });
+        }
+
+        this.isFisProject = isFisProject;
+        this.isFisProjectFather = isFisProjectFather;
+    }
+
     /**
-     * https://www.cnblogs.com/liuxianan/p/vscode-plugin-jump-completion-hover.html#!comments
-     * 查找文件定义的provider，匹配到了就return一个location，否则不做处理
-     * 最终效果是，当按住Ctrl键时，如果return了一个location，字符串就会变成一个可以点击的链接，否则无任何效果
+     * 查找文件定义的provider
+     * 当按住Ctrl键时，如果return了一个location，字符串就会变成一个可以点击的链接，否则无任何效果
      * @param document
      * @param position
      * @param token
@@ -41,9 +109,8 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
     public provideDefinition(
         document: vscode.TextDocument,
         position: vscode.Position,
-        token: vscode.CancellationToken
-        // ): Thenable<vscode.Location> {s
     ): Promise<vscode.Location | undefined> {
+
         const fileName = document.fileName;
         const dirName = vscode.Uri.joinPath(
             vscode.Uri.file(fileName),
@@ -58,8 +125,8 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
 
             if (range?.isSingleLine) {
                 const word = document.getText(range);
-                
                 const regRes = item.reg.exec(word);
+
                 // 绝对路径 ./nav.js
                 if (item.type === 'rel') {
                     const path = vscode.Uri.joinPath(dirName, regRes[1]);
@@ -71,74 +138,52 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
                         ));
                     });
                 }
-                // 相对路径 list:widget/sidebar/sidebar.tpl
-                // list
-                const namespace = regRes && regRes[item.namespacePos];
-                // widget/sidebar/sidebar.tpl
-                const tplUri = regRes && regRes[item.uriPos];
-                
-                if (namespace && tplUri) {
-                    return this.getTplPathFromFisConf(
-                        fileName,
-                        namespace,
-                        tplUri
-                    );
+                else if (item.type === 'abs') {
+                    // 绝对路径 list:widget/sidebar/sidebar.tpl
+                    // list
+                    const targetNamespace = regRes && regRes[item.namespacePos];
+                    // widget/sidebar/sidebar.tpl
+                    const targetUri = regRes && regRes[item.uriPos];
+
+                    if (targetNamespace && targetUri) {
+                        return this.getRealPath(
+                            targetNamespace,
+                            targetUri
+                        );
+                    }
                 }
+                
             }
         }
     }
 
     /**
-     *
-     * @param fisProjectRoot
-     * @returns
+     * 获取绝对路径
+     * @param targetNamespace ex: shop
+     * @param targetUri ex: widget/banner/banner.tpl
      */
-    private async getTplPathFromFisConf(
-        fileName: string,
-        uriNamespace: string,
-        tplUri: string
+    private async getRealPath(
+        targetNamespace: string,
+        targetUri: string
     ): Promise<vscode.Location | undefined> {
 
-        const parseNamespace = (fisConfText: string) => {
-            // fis.set('namespace', 'list');
-            const regRes = /fis\.set\(['"]namespace['"].*['"](.+)['"]/.exec(
-                fisConfText
-            );
-            return regRes && regRes[1];
-        
-        }
-        const fisConfList = await vscode.workspace.findFiles('fis-conf.js', '**/node_modules/**', 1)
-        const isFisProject = fisConfList.length;
-        
-        if (isFisProject) {
+        if (targetNamespace && targetUri && this.fisNamespaceDirDict[targetNamespace]) {
+            const targetDir = this.fisNamespaceDirDict[targetNamespace];
             let uri: vscode.Uri = null;
-            const fisDoc = await vscode.workspace.openTextDocument(fisConfList[0]);
-            // fis.set('namespace', 'list'); 一般不会超出20行
-            const fisDocText = fisDoc.getText(new vscode.Range(
-                new vscode.Position(0, 0),
-                new vscode.Position(20, 0)
-            ));
-            const currentNamespace = parseNamespace(fisDocText);
-
-            const SPECIAL_MAP: {[k: string]: string} = {
-                'common': 'fe-pc-common',
-                'm-common': 'fe-wap-common'
-            };
-            const currentFisConfPath = fisConfList[0];
-            const currentFisProjectPath = vscode.Uri.joinPath(currentFisConfPath, '../');
-
-            // vscode.Uri.joinPath();
-            // 情况一：引用本模块
-            if (currentNamespace === uriNamespace) {
-                uri =  vscode.Uri.joinPath(currentFisProjectPath, tplUri);
+            if (this.isFisProject) {
+                uri = vscode.Uri.joinPath(
+                    vscode.workspace.workspaceFolders?.[0]?.uri,
+                    '../',
+                    targetDir,
+                    targetUri
+                );
             }
-            // 情况二：引用公共模块（特殊优化）
-            else if (SPECIAL_MAP[uriNamespace]) {
-                uri = vscode.Uri.joinPath(currentFisProjectPath, '../', SPECIAL_MAP[uriNamespace], tplUri);
-            }
-            // 情况三：很少见，可以遍历上级目录，暂不进行实现
-            else {
-
+            else if (this.isFisProjectFather) {
+                uri = vscode.Uri.joinPath(
+                    vscode.workspace.workspaceFolders?.[0]?.uri,
+                    targetDir,
+                    targetUri
+                );
             }
 
             if (uri) {
@@ -152,6 +197,7 @@ class TplDefinitionProvider implements vscode.DefinitionProvider {
 }
 
 export function usePathHintAndJump(context: vscode.ExtensionContext) {
+    
 	context.subscriptions.push(
         vscode.languages.registerDefinitionProvider(
             [CONSTANTS.languageId],

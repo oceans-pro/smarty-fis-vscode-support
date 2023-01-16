@@ -7,3 +7,6 @@
 {%script%}
 
 {%/script%}
+
+
+{%widget name="namespace:path.tpl"%}
