@@ -19,7 +19,7 @@ const PATH_REG = [
     },
     {
         type: 'abs',
-        reg: /['"](.*?):(.*?\.js)['"]/,
+        reg: /['"](.*?):(.*?\.(js|css))['"]/,
         namespacePos: 1,
         uriPos: 2,
     },

@@ -28,7 +28,9 @@
         "increaseIndentPattern": "{{?(block|capture|else|elseif|for|foreach|foreachelse|function|if|literal|section|setfilter|strip|while)\\b.*}}?",
         "decreaseIndentPattern": "{{?/(block|capture|for|foreach|function|if|literal|section|setfilter|strip|while)\\b}}?"
     },
-    "wordPattern": "([\"'].*?:.*?[\"'])|([^\\s`'\"~_!?|$#@%^&*\\-=+;:,.<>(){}[\\]\\/]+)",
+    "wordPatternOld": "([\"'].*?:.*?[\"'])|([^\\s`'\"~_!?|$#@%^&*\\-=+;:,.<>(){}[\\]\\/]+)",
+    "wordPatternDesc": "此项会影响蓝链的单位",
+    "wordPattern": "([\"'].*?:.*?[\"'])|([^\\s`'\"~_!?|$#@%^&*=+;:,<>(){}[\\]]+)",
     "folding": {
         "markers": {
             "start": "{%(script|style|body|head|html)\\b.*%}",
