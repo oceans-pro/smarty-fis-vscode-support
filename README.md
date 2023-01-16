@@ -6,7 +6,7 @@ Except for the basic features of `smarty-vscode-support`, it can:
 
 - Supports `{%...%}` delimiters. Available for both VSCode [desktop](https://code.visualstudio.com/Download) and [web](https://vscode.dev/).
 
-- Supports js or css highlight in `{$script$}` or `{$style$}`.
+- Supports js or css highlight in `{%script%}` or `{%style%}`.
 
 - Supports path jump, ex: `{%widget name="banana:widget/nav/nav.tpl"%}`.
 
