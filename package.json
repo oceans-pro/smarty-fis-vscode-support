@@ -95,6 +95,14 @@
 			"type": "object",
 			"title": "Smarty Template Support",
 			"properties": {
+				"smarty.paths": {
+					"type": "object",
+					"default": {
+						"common": "fe-pc-common",
+						"m-common": "fe-wap-common"
+					},
+					"description": "fis-conf.js中的namespace与文件夹名字对应关系"
+				},
 				"smarty.highlight": {
 					"type": "boolean",
 					"description": "Enable/disable highlight decoration of Smarty tags",

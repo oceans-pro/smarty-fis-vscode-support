@@ -31,10 +31,7 @@ const PATH_REG = [
 
 class PathDefinitionProvider implements vscode.DefinitionProvider {
     // 兜底，仅暴露两个
-    fisNamespaceDirDict: {[k: string]: string} = {
-        'common': 'fe-pc-common',
-        'm-common': 'fe-wap-common'
-    };
+    fisNamespaceDirDict: {[k: string]: string} = {};
     isFisProject: boolean = false;
     isFisProjectFather: boolean = false;
 
@@ -69,6 +66,10 @@ class PathDefinitionProvider implements vscode.DefinitionProvider {
                 return fileNamespace;
             }
         }
+
+        const paths: {[k: string]: string} = vscode.workspace.getConfiguration().get('smarty.paths') || {};
+        this.fisNamespaceDirDict = paths;
+        
         // in fe-pc-xxx
         const rootFisConfList = await vscode.workspace.findFiles('fis-conf.js', '**/node_modules/**', 1);
         // in fe-pc-xxx ../
