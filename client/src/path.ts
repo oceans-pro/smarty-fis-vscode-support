@@ -159,10 +159,10 @@ class SmartyDefinitionProvider implements vscode.DefinitionProvider {
             return;
         }
         if (isFisProject) {
-            const n = await getNamespaceFromUri(rootFisConfList[0].fsPath);
-            const d = getDirname(rootFisConfList[0].fsPath);
-            if (d && n) {
-                this.fisNamespaceDirDict[n] = d;
+            const localN = await getNamespaceFromUri(rootFisConfList[0].fsPath);
+            const localD = getDirname(rootFisConfList[0].fsPath);
+            if (localD && localN) {
+                this.fisNamespaceDirDict[localN] = localD;
             }
             const jsonFiles = await vscode.workspace.findFiles('[jt]sconfig.json');
             if (jsonFiles && jsonFiles[0]) {
@@ -183,6 +183,9 @@ class SmartyDefinitionProvider implements vscode.DefinitionProvider {
                             return s;
                         }
                     });
+                    if (n === localN) {
+                        return;
+                    }
                     if (n && d) {
                         this.fisNamespaceDirDict[n] = d;
                     }
