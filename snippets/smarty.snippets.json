@@ -346,5 +346,10 @@
 		"prefix": "object",
 		"body": "new Object({%$$1%})\n$0",
 		"description": "object"
+	},
+	"ik_bridge": {
+		"prefix": "ik_bridge",
+		"body": "{%ik_bridge%}\n$0{%/ik_bridge%}",
+		"description": "将html代码内的gbk编码转化为utf-8编码，用于utf-8的pc项目引用common模块的组件。支持disabled属性，为true时不进行转码。"
 	}
 }

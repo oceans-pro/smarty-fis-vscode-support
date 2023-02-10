@@ -249,7 +249,7 @@
 					"name": "support.function.built-in.smartyFis"
 				},
 				{
-					"match": "\\b(ik_json_encode)\\b",
+					"match": "\\b(ik_json_encode|ik_bridge)\\b",
 					"name": "support.function.built-in.smartyFisIknow"
 				},
 				{
@@ -267,6 +267,11 @@
 				{
 					"match": "\\|(capitalize|cat|count_characters|count_paragraphs|count_sentences|count_words|date_format|default|escape|from_charset|indent|lower|nl2br|regex_replace|replace|spacify|string_format|strip|strip_tags|to_charset|truncate|unescape|upper|wordwrap|counter|cycle|eval|fetch|html_checkboxes|html_image|html_options|html_radios|html_select_date|html_select_time|html_table|mailto|math|textformat)",
 					"name": "support.function.variable-modifier.smarty"
+				},
+				{
+					"match": "\\|(ik_escape|ik_utf8)",
+					"name": "support.function.variable-modifier.smarty.iknow",
+					"comment": "知道特有"
 				},
 				{
 					"match": "\\|([a-zA-Z_])+",

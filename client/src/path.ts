@@ -20,7 +20,7 @@ const PATH_REG = [
     },
     {
         type: 'abs',
-        reg: /['"](.*?):(.*?\.(js|css))['"]/,
+        reg: /['"](.*?):(.*?\.(js|ts|tsx|css|less))['"]/,
         namespacePos: 1,
         uriPos: 2,
     },
@@ -43,6 +43,7 @@ class SmartyCompletionItemProvider implements vscode.CompletionItemProvider {
         if (st.endsWith('{%') && ed.includes('%}') ) {
             const arr = [
                 'ik_json_encode',
+                'ik_bridge',
                 'block',
                 'widget',
                 'script',
