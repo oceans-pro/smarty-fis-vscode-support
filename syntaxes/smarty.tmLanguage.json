@@ -16,7 +16,8 @@
 				{ "include": "#comments" },
 				{ "include": "#script" },
 				{ "include": "#style" },
-				{ "include": "#blocks" }
+				{ "include": "#blocks" },
+				{ "include": "#define" }
 			]
 		},
 		"L:text.html.smarty -source.css -source.js": {
@@ -29,6 +30,11 @@
 		{ "include": "text.html.derivative" }
 	],
 	"repository": {
+		"define": {
+			"match": "DEFINE_[a-zA-Z_]*",
+			"name": "variable.other.smarty.define markup.underline",
+			"comment": "知道特有define变量"
+		},
 		"script": {
             "begin": "({%)(script)(%})",
             "name": "source.js",
@@ -272,7 +278,7 @@
 					"match": "\\|(ik_escape|ik_utf8)",
 					"name": "support.function.variable-modifier.smarty.iknow",
 					"comment": "知道特有"
-				},
+				},				
 				{
 					"match": "\\|([a-zA-Z_])+",
 					"name": "support.function.custom-modifier.smarty"
