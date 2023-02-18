@@ -135,10 +135,10 @@ class SmartyDefinitionProvider implements vscode.DefinitionProvider {
     
         const getNamespaceFromUri = async (uri: string) => {
             const fisDoc = await vscode.workspace.openTextDocument(uri);
-            // fis.set('namespace', 'list'); 一般不会超出20行
+            // fis.set('namespace', 'list'); 一般不会超出100行
             const fisDocText = fisDoc.getText(new vscode.Range(
                 new vscode.Position(0, 0),
-                new vscode.Position(20, 0)
+                new vscode.Position(300, 0)
             ));
             const fileNamespace = parseNamespace(fisDocText);
             if (fileNamespace) {
