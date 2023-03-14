@@ -20,3 +20,13 @@ Except for the basic features of `smarty-vscode-support`, it can:
 npm install -g @vscode/vsce
 vsce package
 ```
+
+
+For Emmet Abbreviations:
+
+Paste the following into your settings.json
+```json
+"emmet.includeLanguages": {
+	"smarty": "html"
+},
+```

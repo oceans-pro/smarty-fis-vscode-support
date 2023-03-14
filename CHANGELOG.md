@@ -6,3 +6,8 @@
 
 - 支持 ik_bridge、ik_utf8等高亮
 - 支持require路径包含ts、tsx
+
+
+## 1.0.2 (2023.3.14)
+
+- 支持 ik_adv、ik_fetch高亮

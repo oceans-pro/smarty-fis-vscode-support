@@ -18,5 +18,15 @@
 		"prefix": "sm object",
 		"body": "new Object({%ik_json_encode data=$$1%})$0",
 		"description": "支持GBK转码的json_encode"
+	},
+	"ik_fetch": {
+		"prefix": "ik_fetch",
+		"body": "{%ik_fetch var=\"$1\" url=\"$2\"%}$0",
+		"description": "接口异步化"
+	},
+	"ik_adv": {
+		"prefix": "ik_adv",
+		"body": "{%ik_adv var=\"$1\" file=\"$2\" pick=[$3]%}$0",
+		"description": "读取ADV文件"
 	}
 }

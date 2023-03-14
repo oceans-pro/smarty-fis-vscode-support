@@ -255,7 +255,7 @@
 					"name": "support.function.built-in.smartyFis"
 				},
 				{
-					"match": "\\b(ik_json_encode|ik_bridge)\\b",
+					"match": "\\b(ik_json_encode|ik_bridge|ik_adv|ik_fetch)\\b",
 					"name": "support.function.built-in.smartyFisIknow"
 				},
 				{
