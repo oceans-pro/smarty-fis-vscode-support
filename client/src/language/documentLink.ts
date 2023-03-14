@@ -6,7 +6,10 @@ export class DocumentLinkProvider implements DocumentLinkProvider {
 	async provideDocumentLinks(document: TextDocument, token: CancellationToken) {
 		const results: DocumentLink[] = [];
 		const text: string = document.getText();
-		const linkPattern: RegExp = /(?<=['"]).*\.tpl(?=['"])/g;
+		// const linkPattern: RegExp = /(?<=['"]).*\.tpl(?=['"])/g;
+		// todo add doc support for fis-smarty?
+		const linkPattern: RegExp = /(?<=随便=['"]).*\.tpl/g;
+
 
 		for (let match: RegExpExecArray; match = linkPattern.exec(text); match) {
 

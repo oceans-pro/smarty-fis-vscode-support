@@ -19,8 +19,13 @@ export class HoverProvider implements HoverProvider {
 		const line = document.lineAt(position).text;
 
 		try {
-			const regex = new RegExp(`{%.*?${word}\\b.*?%}`);
-			if (!regex.test(line) || !snippets[word]) {
+			const regexOfFunction = new RegExp(`{%/?${word}\\b.*?%}`);
+			const regexOfModifier = new RegExp(`{%.*?\\|${word}\\b.*?%}`);
+			console.log(line, regexOfModifier.test(line));
+			if (!regexOfFunction.test(line) && !regexOfModifier.test(line)) {
+				return null;
+			}
+			if (!snippets[word]) {
 				return null;
 			}
 		}
