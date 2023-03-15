@@ -20,9 +20,10 @@ export class HoverProvider implements HoverProvider {
 
 		try {
 			const regexOfFunction = new RegExp(`{%/?${word}\\b.*?%}`);
+			const regexOfFunctionAlone = new RegExp(`{%${word}$`);
 			const regexOfModifier = new RegExp(`{%.*?\\|${word}\\b.*?%}`);
-			console.log(line, regexOfModifier.test(line));
-			if (!regexOfFunction.test(line) && !regexOfModifier.test(line)) {
+
+			if (!regexOfFunction.test(line) && !regexOfModifier.test(line) && !regexOfFunctionAlone.test(line)) {
 				return null;
 			}
 			if (!snippets[word]) {
