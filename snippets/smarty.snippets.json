@@ -67,7 +67,7 @@
 	},
 	"foreach": {
 		"prefix": "foreach",
-		"body": "{%foreach from=${1:collection} item=${2:item}${4: key=${3:key}}${6: name=${5:name}}%}\n\t$0\n{%/foreach%}",
+		"body": "{%foreach $${1:array} as $${2:key} => $${3:item}%}\n\t$0{%$${2:key}%}, {%$${3:item}%}\n{%/foreach%}",
 		"description": "[foreach] is used for looping over arrays of data.",
 		"reference": "language.function.foreach.tpl"
 	},
@@ -351,6 +351,16 @@
 		"prefix": "ik_bridge",
 		"body": "{%ik_bridge%}\n$0{%/ik_bridge%}",
 		"description": "将html代码内的gbk编码转化为utf-8编码，用于utf-8的pc项目引用common模块的组件。支持disabled属性，为true时不进行转码。"
+	},
+	"ik_fetch": {
+		"prefix": "ik_fetch",
+		"body": "{%ik_fetch var=\"$1\" url=\"$2\"%}$0",
+		"description": "接口异步化"
+	},
+	"ik_adv": {
+		"prefix": "ik_adv",
+		"body": "{%ik_adv var=\"$1\" file=\"$2\" pick=[$3]%}$0",
+		"description": "读取ADV文件"
 	},
 	"ik_utf8": {
 		"prefix": "|ik_utf8",
