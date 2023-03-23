@@ -299,7 +299,7 @@
 	},
 	"html": {
 		"prefix": "html",
-		"body": "{%html framework=\"common:static/mod.js\"%}\n\t${1}\n{%/html%}\n$0",
+		"body": "{%html framework=\"common:static/lib/mod.js\"%}\n\t${1}\n{%/html%}\n$0",
 		"description": "替换 html 标签，必须。framework 设置 mod.js 的 ID，为了确认哪个文件是模块化框架"
 	},
 	"head": {
