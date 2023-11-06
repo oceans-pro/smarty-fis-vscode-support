@@ -25,6 +25,7 @@ vsce package
 For Emmet Abbreviations:
 
 Paste the following into your settings.json
+
 ```json
 "emmet.includeLanguages": {
 	"smarty": "html"
