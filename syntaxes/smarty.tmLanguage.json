@@ -17,14 +17,18 @@
                 {"include": "#script"},
                 {"include": "#style"},
                 {"include": "#blocks"},
-                {"include": "#define"}
+                {"include": "#define"},
+                {"include": "#fisk-tag.widget-app"}
             ]
         },
         "L:text.html.smarty -source.css -source.js": {
             "patterns": [{"include": "#literals"}]
         }
     },
-    "patterns": [{"include": "text.html.derivative"}],
+    "patterns": [
+        {"include": "text.html.derivative"},
+        {"include": "fisk-tag.widget-app"}
+    ],
     "repository": {
         "define": {
             "match": "DEFINE_[a-zA-Z_]*",
@@ -445,6 +449,53 @@
                 {"include": "#lang"},
                 {"include": "#operators"},
                 {"include": "#numbers"}
+            ]
+        },
+        "fisk-tag.widget-app": {
+            "begin": "(<\\/?)widget-app\\s+",
+            "end": "/>",
+            "name": "support.class.component.vue",
+            "beginCaptures": {
+                "1": {
+                    "name": "punctuation.definition.tag.begin.html"
+                }
+            },
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.definition.tag.end.html"
+                }
+            },
+            "patterns": [
+                {
+                    "match": "(\\w+)(=)",
+                    "captures": {
+                        "1": {
+                            "name": "variable.parameter.smarty"
+                        },
+                        "2": {
+                            "name": "keyword.operator.assignment.smarty"
+                        }
+                    }
+                },
+                {
+                    "match": "\"[0-9]+\"",
+                    "name": "constant.numeric.decimal.smarty"
+                },
+                {
+                    "match": "\"\\$[a-zA-Z_]+\"",
+                    "name": "variable.other.php"
+                },
+                {
+                    "match": "\"([^\"]*)\"",
+                    "captures": {
+                        "0": {
+                            "name": "string.quoted.double.smarty"
+                        },
+                        "1": {
+                            "name": "string.quoted.double.smarty.content"
+                        }
+                    }
+                }
             ]
         }
     }
