@@ -102,8 +102,12 @@
 				"smarty.paths": {
 					"type": "object",
 					"default": {
+						"shared": "fe-cross-shared",
+						"pc-shared": "fe-pc-shared",
+						"m-shared": "fe-wap-shared",
+						"common-new": "fe-pc-common-new",
+						"m-common": "fe-wap-common",
 						"common": "fe-pc-common",
-						"m-common": "fe-wap-common"
 					},
 					"description": "fis-conf.js中的namespace与文件夹名字对应关系"
 				},
