@@ -1,5 +1,5 @@
 {
-	"name": "smarty-fis-support",
+	"name": "fisk",
 	"displayName": "Smarty Fis Support",
 	"description": "Smarty Fis support with formatting, folding, snippets, syntax highlighting and more",
 	"author": {
