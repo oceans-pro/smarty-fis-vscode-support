@@ -327,6 +327,11 @@
 		"body": "{%widget name=\"${1:namespace}:${2:path}.tpl\"%}\n$0",
 		"description": "FIS 模块化组件加载接口，加载某个模板并收集模板依赖的所有静态资源。"
 	},
+	"widget-app": {
+		"prefix": "wgtapp",
+		"body": "<widget-app name=\"widget/${2:path}/${2:path}.tpl\"></widget-app>\n$0",
+		"description": "widget-app"
+	},
 	"smartyVar": {
 		"prefix": "sm",
 		"body": "{%$1%}\n$0",
@@ -347,11 +352,6 @@
 		"body": "new Object({%$$1%})\n$0",
 		"description": "object"
 	},
-	"ik_bridge": {
-		"prefix": "ik_bridge",
-		"body": "{%ik_bridge%}\n$0{%/ik_bridge%}",
-		"description": "将html代码内的gbk编码转化为utf-8编码，用于utf-8的pc项目引用common模块的组件。支持disabled属性，为true时不进行转码。"
-	},
 	"ik_fetch": {
 		"prefix": "ik_fetch",
 		"body": "{%ik_fetch var=\"$1\" url=\"$2\"%}$0",
@@ -361,6 +361,11 @@
 		"prefix": "ik_adv",
 		"body": "{%ik_adv var=\"$1\" file=\"$2\" pick=[$3]%}$0",
 		"description": "读取ADV文件"
+	},
+	"ik_func": {
+		"prefix": "ik_func",
+		"body": "{%ik_func var=\"$1\" func=\"$2\"%}$0",
+		"description": "BFF层, 用标准php语法代替smarty。smarty仅保留条件渲染、循环渲染"
 	},
 	"ik_utf8": {
 		"prefix": "|ik_utf8",

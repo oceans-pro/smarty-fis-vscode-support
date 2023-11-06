@@ -1,7 +1,7 @@
 {
-	"name": "smarty-template-support",
-	"displayName": "Smarty Template Support",
-	"description": "Smarty template support with formatting, folding, snippets, syntax highlighting and more",
+	"name": "fisk",
+	"displayName": "vscode-fisk",
+	"description": "Smarty Fis support with formatting, folding, snippets, syntax highlighting and more",
 	"author": {
 		"name": "Aswin Kumar",
 		"email": "aswinkumar863@gmail.com"

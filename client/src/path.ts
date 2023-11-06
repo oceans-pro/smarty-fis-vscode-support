@@ -25,9 +25,14 @@ const PATH_REG = [
         uriPos: 2,
     },
     {
+        type: 'func',
+        reg: /func=['"](.*?)['"]/,
+        funcPos: 1,
+    },
+    {
         type: 'rel',
         reg: /['"](\.\/.*)['"]/
-    }
+    },
 ];
 
 class SmartyCompletionItemProvider implements vscode.CompletionItemProvider {
@@ -113,6 +118,7 @@ class SmartyDefinitionProvider implements vscode.DefinitionProvider {
     fisNamespaceDirDict: {[k: string]: string} = {};
     isFisProject: boolean = false;
     isFisProjectFather: boolean = false;
+    namespace: string = '';
 
     constructor() {
         this.initFisPathDict();
@@ -121,10 +127,17 @@ class SmartyDefinitionProvider implements vscode.DefinitionProvider {
     async initFisPathDict() {
         const parseNamespace = (fisConfText: string) => {
             // fis.set('namespace', 'list');
-            const regRes = /fis\.set\(['"]namespace['"].*['"](.+)['"]/.exec(
-                fisConfText
-            );
-            return regRes && regRes[1];
+            const regRes = /fis\.set\(['"]namespace['"].*['"](.+)['"]/.exec(fisConfText);
+            // 非fisk模块
+            if (regRes && regRes[1]) {
+                return regRes[1];
+            }
+            // fisk模块
+            else {
+                // namespace: 'note',
+                const regRes = /namespace:\s*['"](.+)['"]/.exec(fisConfText);
+                return regRes && regRes[1];
+            }
         }
     
         const getDirname = (path: string) => {
@@ -149,10 +162,22 @@ class SmartyDefinitionProvider implements vscode.DefinitionProvider {
         const paths: {[k: string]: string} = vscode.workspace.getConfiguration().get('smarty.paths') || {};
         this.fisNamespaceDirDict = paths;
         
-        // in fe-pc-xxx
-        const rootFisConfList = await vscode.workspace.findFiles('fis-conf.js', '**/node_modules/**', 1);
+        // in fe-pc-xxx fis-conf.js or fis-conf.cjs
+
+        const rootFisConfList = [];
+        rootFisConfList.push(...await vscode.workspace.findFiles('fis-conf.js', '**/node_modules/**', 1));
+        rootFisConfList.push(...await vscode.workspace.findFiles('fis-conf.cjs', '**/node_modules/**', 1));
+
+        // in fe-pc-xxx fis-conf.cjs
         // in fe-pc-xxx ../
-        const allFisConfList = await vscode.workspace.findFiles('*/fis-conf.js', '**/node_modules/**');
+        let allFisConfList = [];
+        if (!rootFisConfList.length) {
+            allFisConfList.push(...await vscode.workspace.findFiles('*/fis-conf.js', '**/node_modules/**'));
+            if (!allFisConfList.length) {
+                allFisConfList.push(...await vscode.workspace.findFiles('*/fis-conf.cjs', '**/node_modules/**'));
+            }
+            allFisConfList = allFisConfList.filter(item => item.path.includes('fe-'));
+        }
         const isFisProject = !!rootFisConfList.length;
         const isFisProjectFather = !!allFisConfList.length && !isFisProject;
     
@@ -161,6 +186,8 @@ class SmartyDefinitionProvider implements vscode.DefinitionProvider {
         }
         if (isFisProject) {
             const localN = await getNamespaceFromUri(rootFisConfList[0].fsPath);
+            this.namespace = localN;
+
             const localD = getDirname(rootFisConfList[0].fsPath);
             if (localD && localN) {
                 this.fisNamespaceDirDict[localN] = localD;
@@ -254,15 +281,26 @@ class SmartyDefinitionProvider implements vscode.DefinitionProvider {
                     const targetNamespace = regRes && regRes[item.namespacePos];
                     // widget/sidebar/sidebar.tpl
                     const targetUri = regRes && regRes[item.uriPos];
-
-                    if (targetNamespace && targetUri) {
+                    if (['page', 'widget', 'style'].includes(targetNamespace) && this.namespace) {
+                        return this.getRealPath(
+                            this.namespace,
+                            `${targetNamespace}/${targetUri}`,
+                        );
+                    }
+                    else if (targetNamespace && targetUri) {
                         return this.getRealPath(
                             targetNamespace,
                             targetUri
                         );
                     }
                 }
-                
+                else if (item.type === 'func') {
+                    const funcPos = regRes && regRes[item.funcPos];
+                    return this.getRealPath(
+                        this.namespace,
+                        `func/${funcPos}.php`
+                    );
+                }
             }
         }
     }

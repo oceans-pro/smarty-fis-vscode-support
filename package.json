@@ -1,13 +1,13 @@
 {
 	"name": "fisk",
-	"displayName": "Smarty Fis Support",
+	"displayName": "fisk",
 	"description": "Smarty Fis support with formatting, folding, snippets, syntax highlighting and more",
 	"author": {
 		"name": "oceans",
 		"email": "oceans-mail@qq.com"
 	},
 	"license": "MIT",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"publisher": "oceans-pro",
 	"icon": "images/smarty.png",
 	"galleryBanner": {
@@ -107,7 +107,7 @@
 						"m-shared": "fe-wap-shared",
 						"common-new": "fe-pc-common-new",
 						"m-common": "fe-wap-common",
-						"common": "fe-pc-common",
+						"common": "fe-pc-common"
 					},
 					"description": "fis-conf.js中的namespace与文件夹名字对应关系"
 				},

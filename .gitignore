@@ -27,5 +27,5 @@ output/
 .env.*
 !.env.example
 
-.vsix
+*.vsix
 .DS_Store
