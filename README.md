@@ -19,6 +19,7 @@ Except for the basic features of `smarty-vscode-support`, it can:
 ```sh
 npm install -g @vscode/vsce
 vsce package
+vsce publish
 ```
 
 
