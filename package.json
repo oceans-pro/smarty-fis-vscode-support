@@ -14,10 +14,6 @@
 		"color": "#BEAE3A",
 		"theme": "dark"
 	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/oceans-pro/smarty-fis-vscode-support"
-	},
 	"sponsor": {
 		"url": "https://ko-fi.com/aswinkumar863"
 	},
