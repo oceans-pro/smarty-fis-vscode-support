@@ -467,7 +467,7 @@
             },
             "patterns": [
                 {
-                    "match": "(\\w+)(=)",
+                    "match": "([a-zA-Z_\\-]+)(=)",
                     "captures": {
                         "1": {
                             "name": "variable.parameter.smarty"

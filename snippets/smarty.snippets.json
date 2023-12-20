@@ -328,7 +328,7 @@
 		"description": "FIS 模块化组件加载接口，加载某个模板并收集模板依赖的所有静态资源。"
 	},
 	"widget-app": {
-		"prefix": "wgtapp",
+		"prefix": "app",
 		"body": "<widget-app name=\"widget/${2:path}/${2:path}.tpl\"></widget-app>\n$0",
 		"description": "widget-app"
 	},
