@@ -10,9 +10,7 @@ Except for the basic features of `smarty-vscode-support`, it can:
 
 - Supports path jump, ex: `{%widget name="banana:widget/nav/nav.tpl"%}`.
 
-
-推荐使用 vscode默认主题 `Dark+` 以获取最佳高亮效果。
-
+- Support `<widget-app />`
 
 如何打包成vsix？
 

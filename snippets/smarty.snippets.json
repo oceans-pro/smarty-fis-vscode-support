@@ -329,8 +329,8 @@
 	},
 	"widget-app": {
 		"prefix": "app",
-		"body": "<widget-app name=\"widget/${2:path}/${2:path}.tpl\"></widget-app>\n$0",
-		"description": "widget-app"
+		"body": "<widget-app name=\"widget/${2:path}/${2:path}.${3:ext}\" />\n$0",
+		"description": "widget-app, 一种快速创建app的fisk内置标签"
 	},
 	"smartyVar": {
 		"prefix": "sm",
